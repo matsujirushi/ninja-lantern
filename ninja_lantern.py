@@ -14,8 +14,6 @@ from utils import CvFpsCalc
 from utils import CvDrawText
 from model.yolox.yolox_onnx import YoloxONNX
 
-from rpi_ws281x import PixelStrip, Color
-
 
 # LED strip configuration:
 LED_COUNT = 57        # Number of LED pixels.
@@ -29,80 +27,12 @@ LED_CHANNEL = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
 def display_color_pattern(strip, seal, count):
     """Display LED pattern"""
-    seal_effects = {
-        "seal1": {"colors": [(255, 0, 0), (0, 255, 0), (0, 0, 255)], "effect": "static"},
-        "seal2": {"colors": [(255, 255, 0), (0, 255, 255), (255, 0, 255)], "effect": "blink", "speed": 0.5},
-        "seal3": {"colors": [(255, 0, 127), (127, 0, 255), (0, 255, 127)], "effect": "gradient", "speed": 0.5},
-        "seal4": {"colors": [(255, 255, 255), (127, 127, 127), (0, 0, 0)], "effect": "blink", "speed": 1},
-        "seal5": {"colors": [(255, 0, 255), (0, 255, 255), (255, 255, 0)], "effect": "gradient", "speed": 1},
-        "seal6": {"colors": [(255, 127, 0), (127, 255, 0), (0, 255, 127)], "effect": "blink", "speed": 0.5},
-        "seal7": {"colors": [(127, 0, 255), (0, 255, 127), (127, 255, 0)], "effect": "gradient", "speed": 0.5},
-        "seal8": {"colors": [(255, 255, 0), (0, 0, 255)], "effect": "blink", "speed": 1},
-        "seal9": {"colors": [(0, 255, 0), (255, 0, 0)], "effect": "gradient", "speed": 1},
-        "seal10": {"colors": [(127, 0, 255), (255, 0, 127)], "effect": "blink", "speed": 0.5},
-        "seal11": {"colors": [(0, 255, 255), (255, 255, 0)], "effect": "gradient", "speed": 0.5},
-        "seal12": {"colors": [(255, 127, 0), (127, 255, 0)], "effect": "blink", "speed": 1},
-        "seal13": {"colors": [(255, 255, 255), (127, 127, 127)], "effect": "gradient", "speed": 1},
-        "seal14": {"colors": [(255, 0, 255), (0, 255, 0)], "effect": "blink", "speed": 0.5},
-        "seal15": {"colors": [(255, 255, 0), (0, 255, 255)], "effect": "gradient", "speed": 0.5},
-        "seal16": {"colors": [(127, 0, 255), (0, 127, 255)], "effect": "blink", "speed": 1},
-        "seal17": {"colors": [(255, 0, 127), (127, 0, 255)], "effect": "gradient", "speed": 1},
-        "seal18": {"colors": [(255, 255, 255), (0, 0, 0)], "effect": "slide"},
-    }
-
-    if seal in seal_effects:
-        color_pattern = seal_effects[seal]["colors"]
-        effect = seal_effects[seal].get("effect", "static")
-        # speed = seal_effects[seal].get("speed", 0)
-
-        if effect == "static":
-            for i in range(LED_COUNT):
-                strip.setPixelColor(i, Color(color_pattern[i % len(color_pattern)][0],
-                                             color_pattern[i % len(color_pattern)][1],
-                                             color_pattern[i % len(color_pattern)][2]))
-            strip.show()
-        elif effect == "slide":
-            tmp_count = count % LED_COUNT
-            for i in range(LED_COUNT):
-                if i == tmp_count:
-                    strip.setPixelColor(i, Color(color_pattern[0][0],
-                                                 color_pattern[0][1],
-                                                 color_pattern[0][2]))
-                else:
-                    strip.setPixelColor(i, Color(color_pattern[1][0],
-                                                 color_pattern[1][1],
-                                                 color_pattern[1][2]))
-
-            strip.show()
- 
-        elif effect == "blink":
-            tmp_count = count % 4
-            if tmp_count == 0 or tmp_count == 1:
-                for i in range(LED_COUNT):
-                    strip.setPixelColor(i, Color(color_pattern[i % len(color_pattern)][0],
-                                                 color_pattern[i % len(color_pattern)][1],
-                                                 color_pattern[i % len(color_pattern)][2]))
-                strip.show()
-            if tmp_count == 2 or tmp_count == 3:
-                for i in range(LED_COUNT):
-                    strip.setPixelColor(i, Color(0, 0, 0))  # Set all colors to black (off)
-                strip.show()
-        elif effect == "gradient":
-            for i in range(LED_COUNT):
-                index = (i + round(time.time() * 3)) % len(color_pattern)
-                strip.setPixelColor(i, Color(color_pattern[index][0],
-                                             color_pattern[index][1],
-                                             color_pattern[index][2]))
-            strip.show()
-    else:
-        print(f"Unknown seal: {seal}")
+    print(f"called display_color_pattern({seal})")
 
 
 def clear_color(strip):
     """Clear LED color"""
-    for i in range(strip.numPixels()):
-        strip.setPixelColor(i, Color(0, 0, 0))
-        strip.show()
+    printf("called clear_color()")
 
 
 def get_args():
@@ -254,9 +184,8 @@ def main():
     frame_count = 0  # フレームナンバーカウンタ
 
     # Create NeoPixel object with appropriate configuration.
-    strip = PixelStrip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
+    strip = None
     # Intialize the library (must be called once before other functions).
-    strip.begin()
     # Counter for LED pattern
     led_count = 0
 
