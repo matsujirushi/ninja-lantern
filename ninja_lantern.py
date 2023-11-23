@@ -19,7 +19,7 @@ import serial
 
 # LED strip configuration:
 LED_PORT = '/dev/ttyACM2'
-LED_COUNT = 9         # Number of LED pixels.
+LED_COUNT = 10          # Number of LED pixels.
 
 
 def display_color_pattern(device, seal, count):

@@ -20,7 +20,7 @@
 // Constants
 
 static constexpr uint16_t PIXEL_PIN = D10;
-static constexpr uint16_t PIXEL_NUM = 9;
+static constexpr uint16_t PIXEL_NUM = 10;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Variables
